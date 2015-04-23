@@ -41,8 +41,8 @@ describe OA::Graph do
   context 'jsonld flavors' do
     context '#jsonld_oa' do
       it 'has context as url' do
-        expect(g1.jsonld_oa).to match /"@context":\s*"http:\/\/www.w3.org\/ns\/oa-context-20130208.json"/
-        expect(g2.jsonld_oa).to match /"@context":\s*"http:\/\/www.w3.org\/ns\/oa-context-20130208.json"/
+        expect(g1.jsonld_oa).to match(/"@context":\s*"http:\/\/www.w3.org\/ns\/oa-context-20130208.json"/)
+        expect(g2.jsonld_oa).to match(/"@context":\s*"http:\/\/www.w3.org\/ns\/oa-context-20130208.json"/)
       end
       it 'parses as graph' do
         new_g = OA::Graph.new RDF::Graph.new.from_jsonld g1.jsonld_oa
@@ -53,8 +53,8 @@ describe OA::Graph do
     end
     context '#jsonld_iiif' do
       it 'has context as url' do
-        expect(g1.jsonld_iiif).to match /"@context":\s*"http:\/\/iiif.io\/api\/presentation\/2\/context.json"/
-        expect(g2.jsonld_iiif).to match /"@context":\s*"http:\/\/iiif.io\/api\/presentation\/2\/context.json"/
+        expect(g1.jsonld_iiif).to match(/"@context":\s*"http:\/\/iiif.io\/api\/presentation\/2\/context.json"/)
+        expect(g2.jsonld_iiif).to match(/"@context":\s*"http:\/\/iiif.io\/api\/presentation\/2\/context.json"/)
       end
       it 'parses as graph' do
         new_g = OA::Graph.new RDF::Graph.new.from_jsonld g1.jsonld_iiif
@@ -152,8 +152,8 @@ describe OA::Graph do
         }'
         gbc = g.body_chars
         expect(gbc.size).to eql 2
-        expect(gbc).to include "I love this!"
-        expect(gbc).to include "me too"
+        expect(gbc).to include 'I love this!'
+        expect(gbc).to include 'me too'
       end
       it 'multiple bodies, but only one has chars' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld(
@@ -180,7 +180,7 @@ describe OA::Graph do
               ],
               "hasTarget": "http://purl.stanford.edu/kq131cs7229"
             }' )
-        expect(g.body_chars).to eq ["I love this!"]
+        expect(g.body_chars).to eq ['I love this!']
       end
       it 'whitespace retained at beginning or ending' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld '
@@ -200,7 +200,7 @@ describe OA::Graph do
           ],
           "hasTarget": "http://purl.stanford.edu/kq131cs7229"
         }'
-        expect(g.body_chars).to eq ["  la  "]
+        expect(g.body_chars).to eq ['  la  ']
       end
       it 'chars is empty string' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld '
@@ -220,7 +220,7 @@ describe OA::Graph do
           ],
           "hasTarget": "http://purl.stanford.edu/kq131cs7229"
         }'
-        expect(g.body_chars).to eq [""]
+        expect(g.body_chars).to eq ['']
       end
       it 'body is a url' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld(
@@ -266,6 +266,7 @@ describe OA::Graph do
               },
               "hasTarget": "http://purl.stanford.edu/kq131cs7229"
             }' )
+        expect(g.annotated_at).to eq "2014-09-03T17:16:13Z"
       end
       it 'nil if absent' do
         expect(g1.annotated_at).to be nil
@@ -313,8 +314,8 @@ describe OA::Graph do
           "http://target.two.org"
         ]
       }'))
-      expect(OA::Graph).to receive(:subject_statements).with(RDF::URI.new("http://target.one.org"), anything)
-      expect(OA::Graph).to receive(:subject_statements).with(RDF::URI.new("http://target.two.org"), anything)
+      expect(OA::Graph).to receive(:subject_statements).with(RDF::URI.new('http://target.one.org'), anything)
+      expect(OA::Graph).to receive(:subject_statements).with(RDF::URI.new('http://target.two.org'), anything)
       g.remove_predicate_and_its_object_statements(RDF::Vocab::OA.hasTarget)
     end
     it 'removes each predicate statement' do
@@ -425,7 +426,7 @@ describe OA::Graph do
       body_resource = graph.query([nil, RDF::Vocab::OA.hasBody, nil]).first.object
       body_stmts = OA::Graph.subject_statements(body_resource, graph)
       expect(body_stmts.size).to eql 3
-      expect(body_stmts).to include([body_resource, RDF::Vocab::CNT::chars, 'I love this!'])
+      expect(body_stmts).to include([body_resource, RDF::Vocab::CNT.chars, 'I love this!'])
       expect(body_stmts).to include([body_resource, RDF.type, RDF::Vocab::CNT.ContentAsText])
       expect(body_stmts).to include([body_resource, RDF.type, RDF::Vocab::DCMIType.Text])
     end
@@ -516,14 +517,14 @@ describe OA::Graph do
   end # *subject_statements
 
   context '*anno_query' do
-    it 'should find a solution when graph has RDF.type OA::Annotation' do
+    it 'finds a solution when graph has RDF.type OA::Annotation' do
       my_url = 'http://fakeurl.org/id'
       g = RDF::Graph.new.from_ttl("<#{my_url}> a <http://www.w3.org/ns/oa#Annotation> .")
       solutions = g.query OA::Graph.anno_query
       expect(solutions.size).to eq 1
       expect(solutions.first.s.to_s).to eq my_url
     end
-    it 'should not find a solution when graph has no RDF.type OA::Annotation' do
+    it 'does not find a solution when graph has no RDF.type OA::Annotation' do
       g = RDF::Graph.new.from_ttl('<http://anywehre.com> a <http://foo.org/thing> .')
       solutions = g.query OA::Graph.anno_query
       expect(solutions.size).to eq 0
