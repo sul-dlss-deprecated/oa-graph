@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sul-dlss/oa-graph.svg?branch=master)](https://travis-ci.org/sul-dlss/oa-graph) [![Coverage Status](https://coveralls.io/repos/sul-dlss/oa-graph/badge.png)](https://coveralls.io/r/sul-dlss/oa-graph) [![Dependency Status](https://gemnasium.com/sul-dlss/oa-graph.svg)](https://gemnasium.com/sul-dlss/oa-graph) [![Gem Version](https://badge.fury.io/rb/oa-graph.svg)](http://badge.fury.io/rb/oa-graph)
+[![Build Status](https://travis-ci.org/sul-dlss/oa-graph.svg?branch=master)](https://travis-ci.org/sul-dlss/oa-graph) [![Coverage Status](https://coveralls.io/repos/sul-dlss/oa-graph/badge.svg?branch=master)](https://coveralls.io/r/sul-dlss/oa-graph?branch=master) [![Dependency Status](https://gemnasium.com/sul-dlss/oa-graph.svg)](https://gemnasium.com/sul-dlss/oa-graph) [![Gem Version](https://badge.fury.io/rb/oa-graph.svg)](http://badge.fury.io/rb/oa-graph)
 
 
 # OA::Graph
