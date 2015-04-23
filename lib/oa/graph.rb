@@ -1,7 +1,9 @@
 require 'oa/graph/version'
 require 'linkeddata'
 
+# OA is for OpenAnnotation
 module OA
+
   # a wrapper class for RDF::Graph that adds methods specific to OpenAnnotation
   # (http://www.openannotation.org/spec/core/) Annotation objects. This is
   # intended to be used for an RDF::Graph of a single annotation
@@ -89,7 +91,8 @@ module OA
       motivations
     end
 
-    # @param [RDF::URI] predicate either RDF::Vocab::OA.hasTarget or RDF::Vocab::OA.hasBody
+    # @param [RDF::URI] predicate either RDF::Vocab::OA.hasTarget or
+    #   RDF::Vocab::OA.hasBody
     # @return [Array<String>] urls for the predicate, as an Array of Strings
     def predicate_urls(predicate)
       urls = []
@@ -135,8 +138,8 @@ module OA
       remove_has_body_statements
     end
 
-    # remove all RDF::Vocab::OA.hasBody statements and any other statements associated
-    #   with body objects
+    # remove all RDF::Vocab::OA.hasBody statements and any other statements
+    #   associated with body objects
     def remove_has_body_statements
       remove_predicate_and_its_object_statements RDF::Vocab::OA.hasBody
     end
@@ -155,7 +158,7 @@ module OA
         pred_obj = pstmt.object
         OA::Graph.subject_statements(pred_obj, @graph).each { |s|
           @graph.delete s
-        } unless !OA::Graph.subject_statements(pred_obj, @graph)
+        } if OA::Graph.subject_statements(pred_obj, @graph)
         @graph.delete pstmt
       }
     end
@@ -176,6 +179,8 @@ module OA
                                    predicate: s.predicate,
                                    object: s.object)
           @graph.delete s
+        else
+          next
         end
       }
     end
