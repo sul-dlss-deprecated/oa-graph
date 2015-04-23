@@ -66,11 +66,11 @@ module OA
     #   is a Node
     def id_as_url
       solution = @graph.query self.class.anno_query
-      return if solution && solution.size == 1
-
-      rdf_resource = solution.first.s
-      rdf_resource.to_s if rdf_resource.is_a?(RDF::URI)
-      # TODO:  raise exception if not a URI?
+      if solution && solution.size == 1
+        rdf_resource = solution.first.s
+        rdf_resource.to_s if rdf_resource.is_a?(RDF::URI)
+        # TODO:  raise exception if not a URI?
+      end
     end
 
     # @return [Array<String>] Array of urls expressing the OA motivated_by
@@ -121,9 +121,7 @@ module OA
     # @return [String] The datetime from the annotatedAt property, or nil
     def annotated_at
       solution = @graph.query [nil, RDF::Vocab::OA.annotatedAt, nil]
-      return if solution && solution.size == 1
-
-      solution.first.object.to_s
+      solution.first.object.to_s if solution && solution.size == 1
     end
 
 

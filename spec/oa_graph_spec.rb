@@ -65,19 +65,19 @@ describe OA::Graph do
     end
   end
 
-  context "canned query methods" do
-    it "#id_as_url" do
-      expect(g1.id_as_url).to eql("http://my.identifiers.com/oa_comment")
-      expect(g2.id_as_url).to eql("http://my.identifiers.com/oa_bookmark")
-      expect(g3.id_as_url).to eql("http://example.org/annos/annotation/mult-targets.json")
+  context 'canned query methods' do
+    it '#id_as_url' do
+      expect(g1.id_as_url).to eql 'http://my.identifiers.com/oa_comment'
+      expect(g2.id_as_url).to eql 'http://my.identifiers.com/oa_bookmark'
+      expect(g3.id_as_url).to eql 'http://example.org/annos/annotation/mult-targets.json'
     end
-    context "#motivated_by" do
-      it "single" do
-        expect(g1.motivated_by).to eq ["http://www.w3.org/ns/oa#commenting"]
-        expect(g2.motivated_by).to eq ["http://www.w3.org/ns/oa#bookmarking"]
-        expect(g3.motivated_by).to eq ["http://www.w3.org/ns/oa#commenting"]
+    context '#motivated_by' do
+      it 'single' do
+        expect(g1.motivated_by).to eq ['http://www.w3.org/ns/oa#commenting']
+        expect(g2.motivated_by).to eq ['http://www.w3.org/ns/oa#bookmarking']
+        expect(g3.motivated_by).to eq ['http://www.w3.org/ns/oa#commenting']
       end
-      it "multiple" do
+      it 'multiple' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld(
           '{
               "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -95,10 +95,10 @@ describe OA::Graph do
             }' )
         gm = g.motivated_by
         expect(gm.size).to eql 2
-        expect(gm).to include("http://www.w3.org/ns/oa#moderating")
-        expect(gm).to include("http://www.w3.org/ns/oa#tagging")
+        expect(gm).to include('http://www.w3.org/ns/oa#moderating')
+        expect(gm).to include('http://www.w3.org/ns/oa#tagging')
       end
-      it "missing: empty Array" do
+      it 'missing: empty Array' do
         my_tg = OA::Graph.new RDF::Graph.new.from_ttl "
          <https://sul-fedora-dev-a.stanford.edu/fedora/rest/anno/f3bc7da9-d531-4b0c-816a-8f2fc849b0b6> a <http://www.w3.org/ns/oa#Annotation>;
            <http://www.w3.org/ns/oa#hasTarget> <http://searchworks.stanford.edu/view/666> ."
@@ -106,27 +106,27 @@ describe OA::Graph do
       end
     end
     context '#predicate_urls' do
-      it "single" do
-        expect(g2.predicate_urls(RDF::Vocab::OA.hasTarget)).to eq ["http://purl.stanford.edu/kq131cs7229"]
+      it 'single' do
+        expect(g2.predicate_urls(RDF::Vocab::OA.hasTarget)).to eq ['http://purl.stanford.edu/kq131cs7229']
       end
-      it "multiple" do
+      it 'multiple' do
         gu = g3.predicate_urls(RDF::Vocab::OA.hasTarget)
         expect(gu.size).to eql 2
-        expect(gu).to include("http://purl.stanford.edu/kq131cs7229")
-        expect(gu).to include("https://stacks.stanford.edu/image/kq131cs7229/kq131cs7229_05_0032_large.jpg")
+        expect(gu).to include('http://purl.stanford.edu/kq131cs7229')
+        expect(gu).to include('https://stacks.stanford.edu/image/kq131cs7229/kq131cs7229_05_0032_large.jpg')
       end
-      it "none" do
+      it 'none' do
         expect(g2.predicate_urls(RDF::Vocab::OA.hasBody)).to eq []
       end
-      it "not a url" do
+      it 'not a url' do
         expect(g1.predicate_urls(RDF::Vocab::OA.hasBody)).to eq []
       end
     end
     context '#body_chars' do
-      it "single" do
-        expect(g1.body_chars).to eq ["I love this!"]
+      it 'single' do
+        expect(g1.body_chars).to eq ['I love this!']
       end
-      it "multiple" do
+      it 'multiple' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld '
         {
           "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -155,7 +155,7 @@ describe OA::Graph do
         expect(gbc).to include "I love this!"
         expect(gbc).to include "me too"
       end
-      it "multiple bodies, but only one has chars" do
+      it 'multiple bodies, but only one has chars' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld(
           '{
               "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -182,7 +182,7 @@ describe OA::Graph do
             }' )
         expect(g.body_chars).to eq ["I love this!"]
       end
-      it "whitespace retained at beginning or ending" do
+      it 'whitespace retained at beginning or ending' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld '
         {
           "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -202,7 +202,7 @@ describe OA::Graph do
         }'
         expect(g.body_chars).to eq ["  la  "]
       end
-      it "chars is empty string" do
+      it 'chars is empty string' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld '
         {
           "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -222,7 +222,7 @@ describe OA::Graph do
         }'
         expect(g.body_chars).to eq [""]
       end
-      it "body is a url" do
+      it 'body is a url' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld(
           '{
               "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -239,7 +239,7 @@ describe OA::Graph do
       end
     end
     context '#annotated_at' do
-      it "String if present" do
+      it 'String if present' do
         g = OA::Graph.new RDF::Graph.new.from_jsonld(
           '{
               "@context": "http://www.w3.org/ns/oa-context-20130208.json",
@@ -267,7 +267,7 @@ describe OA::Graph do
               "hasTarget": "http://purl.stanford.edu/kq131cs7229"
             }' )
       end
-      it "nil if absent" do
+      it 'nil if absent' do
         expect(g1.annotated_at).to be nil
       end
     end
@@ -425,9 +425,9 @@ describe OA::Graph do
       body_resource = graph.query([nil, RDF::Vocab::OA.hasBody, nil]).first.object
       body_stmts = OA::Graph.subject_statements(body_resource, graph)
       expect(body_stmts.size).to eql 3
-      expect(body_stmts).to include([body_resource, RDF::Vocab::CNT::chars, "I love this!"])
+      expect(body_stmts).to include([body_resource, RDF::Vocab::CNT::chars, 'I love this!'])
       expect(body_stmts).to include([body_resource, RDF.type, RDF::Vocab::CNT.ContentAsText])
-      expect(body_stmts).to include([body_resource, RDF.type, RDF::DCMIType.Text])
+      expect(body_stmts).to include([body_resource, RDF.type, RDF::Vocab::DCMIType.Text])
     end
     it 'recurses to get triples from objects of the subject statements' do
       graph = RDF::Graph.new.from_jsonld('{
@@ -446,7 +446,7 @@ describe OA::Graph do
       target_stmts = OA::Graph.subject_statements(target_resource, graph)
       expect(target_stmts.size).to eql 6
       expect(target_stmts).to include([target_resource, RDF.type, RDF::Vocab::OA.SpecificResource])
-      expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSource, "http://purl.stanford.edu/kq131cs7229.html"])
+      expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSource, 'http://purl.stanford.edu/kq131cs7229.html'])
       selector_resource =  graph.query([target_resource, RDF::Vocab::OA.hasSelector, nil]).first.object
       expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSelector, selector_resource])
       expect(target_stmts).to include([selector_resource, RDF.type, RDF::Vocab::OA.TextPositionSelector])
@@ -471,8 +471,8 @@ describe OA::Graph do
       selector_resource =  graph.query([target_resource, RDF::Vocab::OA.hasSelector, nil]).first.object
       expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSelector, selector_resource])
       expect(target_stmts).to include([selector_resource, RDF.type, RDF::Vocab::OA.FragmentSelector])
-      expect(target_stmts).to include([selector_resource, RDF.value, RDF::Literal.new("xywh=0,0,200,200")])
-      expect(target_stmts).to include([selector_resource, RDF::DC.conformsTo, "http://www.w3.org/TR/media-frags/"])
+      expect(target_stmts).to include([selector_resource, RDF.value, RDF::Literal.new('xywh=0,0,200,200')])
+      expect(target_stmts).to include([selector_resource, RDF::DC.conformsTo, 'http://www.w3.org/TR/media-frags/'])
     end
     it 'finds all properties of URI nodes' do
       graph = RDF::Graph.new.from_jsonld('{
@@ -489,10 +489,10 @@ describe OA::Graph do
       target_stmts = OA::Graph.subject_statements(target_resource, graph)
       expect(target_stmts.size).to eql 3
       expect(target_stmts).to include([target_resource, RDF.type, RDF::Vocab::OA.SpecificResource])
-      expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSource, "https://stacks.stanford.edu/image/kq131cs7229/kq131cs7229_05_0032_large.jpg"])
+      expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSource, 'https://stacks.stanford.edu/image/kq131cs7229/kq131cs7229_05_0032_large.jpg'])
       source_resource = graph.query([target_resource, RDF::Vocab::OA.hasSource, nil]).first.object
       expect(target_stmts).to include([target_resource, RDF::Vocab::OA.hasSource, source_resource])
-      expect(target_stmts).to include([source_resource, RDF.type, RDF::DCMIType.Image])
+      expect(target_stmts).to include([source_resource, RDF.type, RDF::Vocab::DCMIType.Image])
     end
     it 'empty Array when the subject is not in the graph' do
       graph = RDF::Graph.new.from_ttl('<http://example.org/annos/annotation/body-chars.ttl> <http://www.w3.org/ns/oa#hasBody> [
@@ -501,7 +501,7 @@ describe OA::Graph do
            <http://www.w3.org/2011/content#chars> "I love this!"
          ] .')
       expect(OA::Graph.subject_statements(RDF::Node.new, graph)).to eql []
-      expect(OA::Graph.subject_statements(RDF::URI.new("http://not.there.org"), graph)).to eql []
+      expect(OA::Graph.subject_statements(RDF::URI.new('http://not.there.org'), graph)).to eql []
     end
     it 'empty Array when the subject is an RDF::URI with no additional properties' do
       graph = RDF::Graph.new.from_ttl('<http://example.org/annos/annotation/body-chars.ttl> <http://www.w3.org/ns/oa#hasTarget> <http://purl.stanford.edu/kq131cs7229>.')
@@ -516,15 +516,15 @@ describe OA::Graph do
   end # *subject_statements
 
   context '*anno_query' do
-    it "should find a solution when graph has RDF.type OA::Annotation" do
-      my_url = "http://fakeurl.org/id"
+    it 'should find a solution when graph has RDF.type OA::Annotation' do
+      my_url = 'http://fakeurl.org/id'
       g = RDF::Graph.new.from_ttl("<#{my_url}> a <http://www.w3.org/ns/oa#Annotation> .")
       solutions = g.query OA::Graph.anno_query
       expect(solutions.size).to eq 1
       expect(solutions.first.s.to_s).to eq my_url
     end
-    it "should not find a solution when graph has no RDF.type OA::Annotation" do
-      g = RDF::Graph.new.from_ttl("<http://anywehre.com> a <http://foo.org/thing> .")
+    it 'should not find a solution when graph has no RDF.type OA::Annotation' do
+      g = RDF::Graph.new.from_ttl('<http://anywehre.com> a <http://foo.org/thing> .')
       solutions = g.query OA::Graph.anno_query
       expect(solutions.size).to eq 0
     end
