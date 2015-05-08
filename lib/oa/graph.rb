@@ -16,7 +16,7 @@ module OA
 # Class Methods ----------------------------------------------------------------
 
     # given an RDF::Resource (an RDF::Node or RDF::URI), look for all the
-    # statements with that object  as the subject, and recurse through the graph
+    # statements with that object as the subject, and recurse through the graph
     # to find all descendant statements pertaining to the subject
     # @param subject the RDF object to be used as the subject in the graph
     #   query.  Should be an RDF::Node or RDF::URI
@@ -78,30 +78,17 @@ module OA
     # @return [Array<String>] Array of urls expressing the OA motivated_by
     #   values
     def motivated_by
-      motivations = []
       q = self.class.anno_query.dup
       q << [:s, RDF::Vocab::OA.motivatedBy, :motivated_by]
-      solution = @graph.query q
-      if solution && solution.size > 0
-        solution.each { |res|
-          motivations << res.motivated_by.to_s
-        }
-      end
-      # TODO:  raise exception if none? (validation)
-      motivations
+      # if the motivation object gives junk with .to_s, then the anno is illegal anyway and we're not responsible
+      @graph.query(q).each.collect {|stmt| stmt.motivated_by.to_s}
     end
 
     # @param [RDF::URI] predicate either RDF::Vocab::OA.hasTarget or
     #   RDF::Vocab::OA.hasBody
     # @return [Array<String>] urls for the predicate, as an Array of Strings
     def predicate_urls(predicate)
-      urls = []
-      predicate_solns = @graph.query [nil, predicate, nil]
-      predicate_solns.each { |predicate_stmt|
-        predicate_obj = predicate_stmt.object
-        urls << predicate_obj.to_str.strip if predicate_obj.is_a?(RDF::URI)
-      }
-      urls
+      @graph.query([nil, predicate, nil]).each_object.collect {|o| o.to_str.strip if o.is_a?(RDF::URI) }.compact
     end
 
     # For all bodies that are of type ContentAsText, get the characters as a
@@ -109,16 +96,11 @@ module OA
     # @return [Array<String>] body chars as Strings, in an Array (one element
     #   for each contentAsText body)
     def body_chars
-      result = []
       q = RDF::Query.new
       q << [nil, RDF::Vocab::OA.hasBody, :body]
       q << [:body, RDF.type, RDF::Vocab::CNT.ContentAsText]
       q << [:body, RDF::Vocab::CNT.chars, :body_chars]
-      solns = @graph.query q
-      solns.each { |soln|
-        result << soln.body_chars.value
-      }
-      result
+      @graph.query(q).each.collect {|stmt| stmt.body_chars.value}
     end
 
     # @return [String] The datetime from the annotatedAt property, or nil
