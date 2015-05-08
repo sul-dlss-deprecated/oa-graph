@@ -31,8 +31,8 @@ Metrics/ClassLength:
   CountComments: false  # count full line comments?
   Max: 150
 
-#Metrics/LineLength:
-#  Max: 180
+Metrics/LineLength:
+  Max: 120
 
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
