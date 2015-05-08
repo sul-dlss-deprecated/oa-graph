@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'oa-graph'
   spec.version       = OA::Graph::VERSION
   spec.authors       = ['Naomi Dushay']
-  spec.email         = ['ndushay@stanford.edu', 'darren.weber@stanford.edu']
+  spec.email         = ['triannon-commits@lists.stanford.edu']
   spec.homepage      = 'https://github.com/sul-dlss/oa-graph'
   spec.summary       = %(Wrapper class for RDF::Graph that adds methods
  specific to OpenAnnotation graphs. http://www.openannotation.org/spec/core/)
